@@ -37,6 +37,7 @@ assignees: ''
 - Polestar API release with the issue:
 - Home Assistant Core release:
 - Operating environment (OS/Container/Supervised/Core):
+- Car model:
 
 ## Traceback/Error logs
 <!--
