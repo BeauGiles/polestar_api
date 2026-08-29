@@ -121,13 +121,18 @@ class PolestarCoordinator(DataUpdateCoordinator):
             # gRPC data: charger connection status and charging target level.
             # This is best-effort; pypolestar treats gRPC as non-fatal and these
             # getters return None when the data is unavailable.
-            self.grpc_battery_data = self.polestar_api.get_grpc_battery(self.vin)
-            self.grpc_target_soc_data = self.polestar_api.get_grpc_target_soc(self.vin)
-
-            if not self.grpc_battery_data:
+            if self.polestar_api.is_grpc_battery_supported(self.vin):
+                self.grpc_battery_data = self.polestar_api.get_grpc_battery(self.vin)
+            else:
+                self.grpc_battery_data = None
                 _LOGGER.debug("No gRPC battery data for VIN %s", self.vin)
 
-            if not self.grpc_target_soc_data:
+            if self.polestar_api.is_grpc_target_soc_supported(self.vin):
+                self.grpc_target_soc_data = self.polestar_api.get_grpc_target_soc(
+                    self.vin
+                )
+            else:
+                self.grpc_target_soc_data = None
                 _LOGGER.debug("No gRPC target SOC data for VIN %s", self.vin)
 
         except PolestarAuthFailedException as exc:
